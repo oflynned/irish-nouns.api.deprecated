@@ -7,7 +7,7 @@ router.post("/",
   async (req, res) => {
     try {
       const guess = await createGuess(req);
-      res.status(200).json(guess);
+      res.status(201).json(guess);
     } catch (err) {
       res.status(400).json(err);
     }
