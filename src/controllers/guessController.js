@@ -1,3 +1,3 @@
 import GenderGuess from "../models/genderGuess";
 
-export const createGuess = async ({body}) => GenderGuess.create(body).save();
+export const createGuess = async ({ body }) => GenderGuess.create(body).save();

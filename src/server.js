@@ -19,64 +19,64 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(fileUpload());
 
-const experimentRoute = require("./routes/guessRoute");
+const experimentRoute = require("./routes/experimentRoute");
 
 app.use("/api/experiments", experimentRoute);
 
 app.use(
-    morgan(morganFormat, {
-        skip: (req, res) => res.statusCode < 400,
-        stream: process.stderr
-    })
+  morgan(morganFormat, {
+    skip: (req, res) => res.statusCode < 400,
+    stream: process.stderr
+  })
 );
 
 app.use(
-    morgan(morganFormat, {
-        skip: (req, res) => res.statusCode >= 400,
-        stream: process.stdout
-    })
+  morgan(morganFormat, {
+    skip: (req, res) => res.statusCode >= 400,
+    stream: process.stdout
+  })
 );
 
 app.use((req, res, next) => {
-    next(createError(404));
+  next(createError(404));
 });
 
 app.use((err, req, res, next) => {
-    if (res.headersSent) {
-        next(err);
-        return;
-    }
+  if (res.headersSent) {
+    next(err);
+    return;
+  }
 
-    logger.error(err.message, {url: req.originalUrl});
+  logger.error(err.message, { url: req.originalUrl });
 
-    res.status(500);
-    res.json({error: err.message});
+  res.status(500);
+  res.json({ error: err.message });
 });
 
-function setPort(port) {
-    if (!port) {
-        throw new Error("no port configured!");
-    }
+function setPort (port) {
+  if (!port) {
+    throw new Error("no port configured!");
+  }
 
-    app.set("port", parseInt(port, 10));
+  app.set("port", parseInt(port, 10));
 }
 
-function listen() {
-    const port = app.get("port") || environmentConfig.port;
-    app = app.listen(port, () => {
-        console.log(`The server is running and listening at http://localhost:${port}`);
-    });
+function listen () {
+  const port = app.get("port") || environmentConfig.port;
+  app = app.listen(port, () => {
+    console.log(`The server is running and listening at http://localhost:${port}`);
+  });
 }
 
-function close() {
-    if (app) {
-        app.close();
-    }
+function close () {
+  if (app) {
+    app.close();
+  }
 }
 
 module.exports = {
-    app,
-    setPort,
-    listen,
-    close
+  app,
+  setPort,
+  listen,
+  close
 };

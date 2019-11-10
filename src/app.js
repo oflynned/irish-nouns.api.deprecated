@@ -5,7 +5,6 @@ import Database from "./common/db";
 // this is just for passing a config in, the db object is accessible globally once it is called
 // it is not required to retrieve the db object and pass to any functions
 Database.connect()
-  .then(() => seedDb())
   .then(() => server.listen())
   .catch((err) => {
     console.error(err);
