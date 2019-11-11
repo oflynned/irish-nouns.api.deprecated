@@ -1,38 +1,48 @@
 import express from "express";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
-import {
-  deleteComment,
-  getComments,
-  notFound,
-  postComment,
-  patchComment
-} from "./controllers";
-import makeCallback from "./express-callback";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import morgan from "morgan";
 
-dotenv.config();
+import environmentConfig from "../config/environmentConfig";
 
-const apiRoot = process.env.DM_API_ROOT;
-const app = express();
+import mapRoutesToApp from "./api";
+import mapHandler from "./api/errorHandler";
+
+let app = express();
 app.use(bodyParser.json());
-// TODO: figure out DNT compliance.
-app.use((_, res, next) => {
-  res.set({ Tk: "!" });
-  next();
-});
-app.post(`${apiRoot}/comments`, makeCallback(postComment));
-app.delete(`${apiRoot}/comments/:id`, makeCallback(deleteComment));
-app.delete(`${apiRoot}/comments`, makeCallback(deleteComment));
-app.patch(`${apiRoot}/comments/:id`, makeCallback(patchComment));
-app.patch(`${apiRoot}/comments`, makeCallback(patchComment));
-app.get(`${apiRoot}/comments`, makeCallback(getComments));
-app.use(makeCallback(notFound));
+app.use(morgan("combined"));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(helmet());
 
-if (process.env.DM_ENV === "dev") {
-  // listen for requests
-  app.listen(3000, () => {
-    console.log("Server is listening on port 3000");
+mapRoutesToApp(app);
+mapHandler(app, morgan);
+
+function setPort (port) {
+  if (!port) {
+    throw new Error("no port configured!");
+  }
+
+  app.set("port", parseInt(port, 10));
+}
+
+async function listen () {
+  const port = app.get("port") || environmentConfig.port;
+  app = app.listen(port, () => {
+    console.log(`The server is running and listening at http://localhost:${port}`);
   });
 }
 
-export default app;
+function close () {
+  if (app) {
+    app.close();
+  }
+}
+
+module.exports = {
+  app,
+  setPort,
+  listen,
+  close
+};

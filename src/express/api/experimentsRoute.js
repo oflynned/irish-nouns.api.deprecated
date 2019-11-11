@@ -1,26 +1,15 @@
+import config from "../../config/environmentConfig";
 import makeCallback from "../callback";
-import {
-  deleteComment,
-  getComments,
-  notFound,
-  postComment,
-  patchComment
-} from "../../controllers";
 
-const apiRoot = process.env.API_ROOT;
+import { postExperiment, notFound } from "../../controllers/experiments";
+
+const apiRoot = config.apiRoot;
 
 const mapRoutes = app => {
-  app.post(`${apiRoot}/comments`, makeCallback(postComment));
-
-  app.get(`${apiRoot}/comments`, makeCallback(getComments));
-
-  app.patch(`${apiRoot}/comments/:id`, makeCallback(patchComment));
-  app.patch(`${apiRoot}/comments`, makeCallback(patchComment));
-
-  app.delete(`${apiRoot}/comments/:id`, makeCallback(deleteComment));
-  app.delete(`${apiRoot}/comments`, makeCallback(deleteComment));
-
+  app.post(`${apiRoot}/experiments`, makeCallback(postExperiment));
   app.use(makeCallback(notFound));
+
+  return app;
 };
 
 export default mapRoutes;
