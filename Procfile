@@ -1,2 +1,2 @@
-#release: npm run migrate
+# release: npm run migrate
 web: npm run serve
