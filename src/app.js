@@ -1,4 +1,4 @@
-import server from "../src/express/index";
+import server from "./express";
 
 server.listen()
   .catch((err) => {
