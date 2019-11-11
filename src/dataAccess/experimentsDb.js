@@ -1,6 +1,6 @@
 import Id from "../entities/id";
 
-const collectionName = "experiments";
+export const experimentsCollectionName = "experiments";
 
 export default function makeExperimentsDb ({ makeDb }) {
   return Object.freeze({
@@ -14,7 +14,7 @@ export default function makeExperimentsDb ({ makeDb }) {
   async function findAll () {
     const db = await makeDb();
     const query = {};
-    const results = await db.collection(collectionName).find(query);
+    const results = await db.collection(experimentsCollectionName).find(query);
     if (results.length() === 0) {
       return [];
     }
@@ -25,7 +25,7 @@ export default function makeExperimentsDb ({ makeDb }) {
 
   async function findByExperimentId ({ id: _id }) {
     const db = await makeDb();
-    const results = await db.collection(collectionName).find({ _id }).toArray();
+    const results = await db.collection(experimentsCollectionName).find({ _id }).toArray();
     if (results.length() === 0) {
       return [];
     }
@@ -36,7 +36,7 @@ export default function makeExperimentsDb ({ makeDb }) {
 
   async function findByUserId ({ userId }) {
     const db = await makeDb();
-    const results = await db.collection(collectionName).find({ category }).toArray();
+    const results = await db.collection(experimentsCollectionName).find({ category }).toArray();
     if (results.length() === 0) {
       return [];
     }
@@ -47,7 +47,7 @@ export default function makeExperimentsDb ({ makeDb }) {
 
   async function findByCategory ({ category }) {
     const db = await makeDb();
-    const results = await db.collection(collectionName).find({ category }).toArray();
+    const results = await db.collection(experimentsCollectionName).find({ category }).toArray();
     if (results.length() === 0) {
       return [];
     }
@@ -58,7 +58,7 @@ export default function makeExperimentsDb ({ makeDb }) {
 
   async function insert ({ id: _id = Id.makeId(), ...experimentInfo }) {
     const db = await makeDb();
-    const result = await db.collection(collectionName).insertOne({ _id, ...experimentInfo });
+    const result = await db.collection(experimentsCollectionName).insertOne({ _id, ...experimentInfo });
     const { _id: id, ...insertedInfo } = result.ops[0];
     return { id, ...insertedInfo };
   }

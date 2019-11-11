@@ -10,9 +10,10 @@
     "lint:staged": "lint-staged",
     "migrate": "migrate-mongo up",
     "rollback": "migrate-mongo down",
-    "serve": "NODE_ENV=production node dist/app.js",
+    "db": "babel-node ./db/index.js",
+    "serve": "npm run db && NODE_ENV=production node dist/app.js",
     "sort-package-json": "sort-package-json",
-    "start": "NODE_ENV=development nodemon src/app.js --exec babel-node",
+    "start": "npm run db && NODE_ENV=development nodemon src/app.js --exec babel-node",
     "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "lint-staged": {
