@@ -14,8 +14,7 @@ export const isTestEnvironment = () => process.env.ENVIRONMENT === "test";
 const commonConfig = {
   environment: process.env.ENVIRONMENT || "development",
   port: parseInt(PORT, 10) || FALLBACK_PORT,
-  corsDomain: (isProductionEnvironment() ? CORS_DOMAIN : "*"),
-  apiRoot: process.env.API_ROOT || "/api"
+  corsDomain: (isProductionEnvironment() ? CORS_DOMAIN : "*")
 };
 
 export default commonConfig;
