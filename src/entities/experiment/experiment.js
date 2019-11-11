@@ -1,21 +1,14 @@
-export default function buildMakeExperiment ({ Id, makeSource }) {
+export default function buildMakeExperiment ({ Id }) {
   return function makeExperiment ({
-    userId,
+    userId = null,
     createdAt = Date.now(),
     updatedAt = Date.now(),
     id = Id.makeId(),
     category,
     posedNoun,
     answerAttempt,
-    correctAnswer,
-    source
+    correctAnswer
   }) {
-    // TODO implement Joi to validate payload instead of manual
-    if (!Id.isValid()) {
-      throw new Error("Id is not valid");
-    }
-
-    const validSource = makeSource(source);
     return Object.freeze({
       getUserId: () => userId,
       getCreatedAt: () => createdAt,
@@ -25,7 +18,6 @@ export default function buildMakeExperiment ({ Id, makeSource }) {
       getPosedNoun: () => posedNoun,
       getAnswerAttempt: () => answerAttempt,
       getCorrectAnswer: () => correctAnswer,
-      getSource: () => validSource,
       isAnswerCorrect: () => correctAnswer === answerAttempt
     });
   };
