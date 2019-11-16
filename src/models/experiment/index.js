@@ -7,6 +7,11 @@ class Experiment extends Document {
     super();
     this.schema(Schema);
   }
+
+  preSave () {
+    super.preSave();
+    this.createdAt = Date.now();
+  }
 }
 
 export default Experiment;
